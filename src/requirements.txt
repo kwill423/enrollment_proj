@@ -1,0 +1,7 @@
+pandas
+numpy
+pymc
+requests
+matplotlib
+plotly
+openpyxl
