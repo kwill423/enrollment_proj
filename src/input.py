@@ -26,7 +26,7 @@ def load_prev_data(self, file_path2):
        
     df_prev = df_prev.rename(columns={
             "State (cleaned)": "state",
-            "Incidence Rate": "incidence_rate"
+            "Age-Adjusted Incidence Rate([rate note]) - cases per 100,000": "incidence_rate"
         })
     df_prev["incidence_rate"] = pd.to_numeric(
             df_prev["incidence_rate"], errors="coerce"

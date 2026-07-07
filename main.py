@@ -1,27 +1,27 @@
-from class_mod import EnrollmentData
-from input import load_enroll_data, load_prev_data
-from populations import get_state_populations, merge_population
-from bayes_model import run_model
-from output import compute_performance, excel_output, png_output
+from src.class_mod import EnrollmentData
+from src.input import load_enroll_data, load_prev_data
+from src.populations import get_state_populations, merge_population
+from src.bayes_model import run_model
+from src.output import compute_performance, excel_output, png_output
 
 def main():
     data = EnrollmentData()
     
     # Load
-    data.load_enroll_data("enrollment_proj/data/dummy_data.xlsx")
-    data.load_prev_data("enrollment_proj/data/pancreatic_cancer_prev.xlsx")
+    load_enroll_data(data, "data/dummy_data.xlsx")
+    load_prev_data(data, "data/pancreatic_cancer_prev.xlsx")
 
     # Clean
-    data.get_state_populations(2025)
-    data.merge_population()
+    get_state_populations(data, 2025)
+    merge_population(data)
 
     # Model
-    data.run_model()
+    run_model(data)
 
     # Output
-    data.compute_performance()
-    data.excel_output()
-    data.png_output()
+    compute_performance(data)
+    excel_output(data)
+    png_output(data)
 
 
 if __name__ == "__main__":
