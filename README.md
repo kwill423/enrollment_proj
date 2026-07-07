@@ -34,28 +34,3 @@ The purpose of this project is to make a model that will estimate the expected e
 Clone the repo:
 
 ## License
-
-## Set Up
-Prior to running the program, the excel file containing enrollment data needs to be merged and cleaned if taken from Veeva like the original files. Veeva provided the subject ID, study, study site, screened date, fiscal year, and country columns. Formulas were used to create a cleaned country column and key containing a unique ID for the study|site|FY. The second sheet of the first file is what pulls the calculated site enrollment rate, SER. A separate Veeva report contains the state for each study site. The two files are merged using a simple python script below or directly through excel:
-```
-import pandas as pd
-
-df1 = pd.read_excel("ASP_enrollment.xlsx", sheet_name= "SiteLevel")
-df2 = pd.read_excel("site_states.xlsx")
-
-merged = df1.merge(
-    df2[['Study', 'Study Site', 'State',]],
-    on=['Study', 'Study Site'],
-    how='left'
-)
-
-merged = merged[merged["Country"] == "USA"]
-merged.to_excel("merged_enroll_rate.xlsx", index=False)
-```
-This is what creates "merged_enroll_rate.xlsx", the file needed to input into the program. If done correctly, it should contain: Study, Study Site, Fiscal Year, First Enrolled Date, Last Enrolled Date, Pts per Site, Duration (months), SER, Country, Key, State. 
-If issues arise while running, ensure the columns are an exact match to what is written above.
-The NIH excel file also had a cleaned State column prior to input and a column "FIPS" that is deleted for a better set up. The line below is the excel formula to add into the added "State (cleaned)" column:
-```
-=TRIM(LEFT(A2, FIND("(", A2 & "(") - 1))))
-```
-Cleaning the NIH file is what allows you to use columns B and C easily.
