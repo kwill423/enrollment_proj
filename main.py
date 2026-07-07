@@ -1,4 +1,4 @@
-from module import EnrollmentData
+from class_mod import EnrollmentData
 from input import load_enroll_data, load_prev_data
 from populations import get_state_populations, merge_population
 from bayes_model import run_model
