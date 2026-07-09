@@ -4,11 +4,11 @@ import numpy as np
 def run_model(self):
     df = self.df
 
-    y = df["enrollments"].values
-    t = df["time"].values
-    prior_rate = df["prior_rate"].values
-    pop = df["population"].values
-    incidence = df["incidence_rate"].values
+    y = df["Enrollments"].values
+    t = df["Time"].values
+    prior_rate = df["Prior_rate"].values
+    pop = df["Population"].values
+    incidence = df["Incidence_rate"].values
     site_idx = df["site_idx"].values
 
     n_sites = df["site_idx"].nunique()

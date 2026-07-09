@@ -3,12 +3,12 @@ import pandas as pd
 def load_enroll_data(self, file_path):
     df = pd.read_excel(file_path)
     df = df.rename(columns={
-        "Study": "study_id",
-        "Study Site": "site_id",
-        "Pts per Site": "enrollments",
-        "SER": "prior_rate",
-        "Duration (months)": "time",
-        "State": "state"
+        "Study": "Study_id",
+        "Study Site": "Site_id",
+        "Pts per Site": "Enrollments",
+        "SER": "Prior_rate",
+        "Duration (months)": "Time",
+        "State": "State"
     })
 
     self.df = df
@@ -25,11 +25,11 @@ def load_prev_data(self, file_path2):
     df_prev = df_prev.iloc[1:].reset_index(drop=True)
        
     df_prev = df_prev.rename(columns={
-            "State (cleaned)": "state",
-            "Age-Adjusted Incidence Rate([rate note]) - cases per 100,000": "incidence_rate"
+            "State (cleaned)": "State",
+            "Age-Adjusted Incidence Rate([rate note]) - cases per 100,000": "Incidence_rate"
         })
-    df_prev["incidence_rate"] = pd.to_numeric(
-            df_prev["incidence_rate"], errors="coerce"
+    df_prev["Incidence_rate"] = pd.to_numeric(
+            df_prev["Incidence_rate"], errors="coerce"
         )
     
     self.df_prev = df_prev

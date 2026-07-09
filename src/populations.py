@@ -70,15 +70,12 @@ def get_state_populations(self, year= None):
 
     url = f"https://api.census.gov/data/{year}/pep/charv"
     parameters = {"get": "NAME,POP",
-                "for": "state:*",
+                "for": "State:*",
                 "YEAR": str(year),
                 "key": api_key
     }
 
     response = rq.get(url, params= parameters, verify= False)
-    print(response.status_code)
-    print(response.url)
-
     
     if response.status_code != 200:
         raise Exception(f"API request failed with status {response.status_code}")
@@ -99,20 +96,36 @@ def get_state_populations(self, year= None):
 
     return self.df_pop
 
+def state_mapping(self):
+
+    df_pop = self.df_pop
+    df_prev = self.df_prev
+
+    reverse_state_map = {v: k for k, v in state_map.items()}
+
+    df_pop["State"] = df_pop["NAME"].map(reverse_state_map)
+
+    df_prev["State"] = df_prev["State"].map(reverse_state_map)
+    df_prev = df_prev.dropna(how="all")
+
+    self.df_pop = df_pop
+    self.df_prev = df_prev
+
+    return self.df_pop, self.df_prev
+
+
+
 def merge_population(self):
     df = self.df
     df_pop = self.df_pop
 
-    reverse_state_map = {v: k for k, v in state_map.items()}
-    df_pop["state"] = df_pop["NAME"].map(reverse_state_map)
-
     df = df.merge(
-    df_pop[["state", "POP"]],
-    on = "state",
+    df_pop[["State", "POP"]],
+    on = "State",
     how="left"
     )
 
-    df = df.rename(columns={"POP": "population"})
+    df = df.rename(columns={"POP": "Population"})
     self.df = df
 
     return self.df
@@ -122,11 +135,11 @@ def merge_prevalence(self):
     df_prev = self.df_prev
 
     df = df.merge(
-        df_prev[["state", "incidence_rate"]],
-        on = "state",
+        df_prev[["State", "Incidence_rate"]],
+        on = "State",
         how = "left"
     )
 
-    df = self.df
+    self.df = df
 
     return self.df
