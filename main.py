@@ -22,6 +22,7 @@ def main():
 
     # Output
     compute_performance(data)
+    print(data.performance)
     excel_output(data)
     png_output(data)
 

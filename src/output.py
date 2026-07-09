@@ -6,6 +6,7 @@ from openpyxl import load_workbook
 from openpyxl.formatting.rule import ColorScaleRule
 
 def compute_performance(self):
+
     trace = self.trace
     df_model = self.df_model
 
@@ -13,35 +14,48 @@ def compute_performance(self):
         dim=("chain", "draw")
     ).values
 
-    performance = pd.DataFrame({
-        "site_id": df_model.drop_duplicates("site_idx")["site_id"],
-        "state": df_model.drop_duplicates("site_idx")["state"],
-        "u_site": u_site_mean,
-        "performance_multiplier": np.exp(u_site_mean)
+    site_performance = pd.DataFrame({
+        "Site_id": df_model.drop_duplicates("site_idx")["Site_id"],
+        "State": df_model.drop_duplicates("site_idx")["State"],
+        "U_site": u_site_mean,
+        "Performance_multiplier": np.exp(u_site_mean)
     })
-    performance = performance.sort_values("performanc_multiplier", ascending=False).reset_index(drop=True)
+    site_performance = site_performance.sort_values("Performance_multiplier", ascending=False).reset_index(drop=True)
     
+    
+    u_study_mean = trace.posterior["u_study"].mean(dim=("chain", "draw")).values
+
+    study_performance = pd.DataFrame({
+        "Study_ID": df_model.drop_duplicates("study_idx")["Study_id"],
+        "State": df_model.drop_duplicates("study_idx")["State"],
+        "U_study": u_study_mean,
+        "Study_multiplier": np.exp(u_study_mean)
+
+    })
 
     os.makedirs("results", exist_ok=True)
-    csv_path = "results/site_performance.csv"
-    performance.to_csv(csv_path, index=False)
-    
+    csv_path1 = "results/site_performance.csv"
+    csv_path2 = "results/study_performance.csv"
+    site_performance.to_csv(csv_path1, index=False)
+    study_performance.to_csv(csv_path2, index=False)
 
-    self.performance = performance
+    self.site_performance = site_performance
+    self.study_performance = study_performance
 
-    return self.performance
+    return self.site_performance, self.study_performance
 
 def excel_output(self):
-    performance = self.performance
-    excel_path = "results/site_performance.xlsx"
+    site_performance = self.site_performance
+    study_performance = self.study_performance
+    excel_path = "results/performance.xlsx"
 
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
-        performance.to_excel(writer, sheet_name="Performance", index=False)
+        site_performance.to_excel(writer, sheet_name="Site_Performance", index=False)
     
     workbook = load_workbook(excel_path)
     worksheet = workbook["Performance"]
 
-    row_count = len(performance) + 1
+    row_count = len(site_performance) + 1
 
     color_rule = ColorScaleRule(
         start_type="min",
@@ -50,7 +64,7 @@ def excel_output(self):
         mid_value=50,
         mid_color="FFEB84",
         end_type="max",
-        end_color="663BE7B"
+        end_color="63BE7B"
         )
     worksheet.conditional_formatting.add(f"D2:D{row_count}", color_rule)
 
