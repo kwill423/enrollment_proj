@@ -7,15 +7,15 @@ from openpyxl.formatting.rule import ColorScaleRule
 
 def compute_performance(self):
     trace = self.trace
-    df = self.df
+    df_model = self.df_model
 
     u_site_mean = trace.posterior["u_site"].mean(
         dim=("chain", "draw")
     ).values
 
     performance = pd.DataFrame({
-        "site_id": df.drop_duplicates("site_idx")["site_id"],
-        "state": df.drop_duplicates("site_idx")["state"],
+        "site_id": df_model.drop_duplicates("site_idx")["site_id"],
+        "state": df_model.drop_duplicates("site_idx")["state"],
         "u_site": u_site_mean,
         "performance_multiplier": np.exp(u_site_mean)
     })
