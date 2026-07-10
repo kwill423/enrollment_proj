@@ -26,10 +26,10 @@ def compute_performance(self):
     u_study_mean = trace.posterior["u_study"].mean(dim=("chain", "draw")).values
 
     study_performance = pd.DataFrame({
-        "Study_ID": df_model.drop_duplicates("study_idx")["Study_id"],
+        "Study_id": df_model.drop_duplicates("study_idx")["Study_id"],
         "State": df_model.drop_duplicates("study_idx")["State"],
         "U_study": u_study_mean,
-        "Study_multiplier": np.exp(u_study_mean)
+        "Performance_multiplier": np.exp(u_study_mean)
 
     })
 
@@ -51,11 +51,15 @@ def excel_output(self):
 
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
         site_performance.to_excel(writer, sheet_name="Site_Performance", index=False)
+        study_performance.to_excel(writer, sheet_name="Study_Performance", index=False)
     
     workbook = load_workbook(excel_path)
-    worksheet = workbook["Performance"]
+    site_ws = workbook["Site_Performance"]
+    study_ws = workbook["Study_Performance"]
 
-    row_count = len(site_performance) + 1
+
+    site_row_count = len(site_performance) + 1
+    study_row_count = len(study_performance) + 1
 
     color_rule = ColorScaleRule(
         start_type="min",
@@ -66,7 +70,8 @@ def excel_output(self):
         end_type="max",
         end_color="63BE7B"
         )
-    worksheet.conditional_formatting.add(f"D2:D{row_count}", color_rule)
+    site_ws.conditional_formatting.add(f"D2:D{site_row_count}", color_rule)
+    study_ws.conditional_formatting.add(f"D2:D{study_row_count}", color_rule)
 
     workbook.save(excel_path)
     print(f"Saved workbook to: {excel_path}")
@@ -80,7 +85,7 @@ def png_output(self):
     performance = self.performance
 
     os.makedirs("results", exist_ok=True)
-    png_path = "results/performance_heatmap.png"
+    png_path1 = "results/site_performance_heatmap.png"
     
     fig_height = max(
         6,
@@ -92,7 +97,7 @@ def png_output(self):
     )
 
     heatmap_values = performance[
-        ["performance_multiplier"]
+        ["Performance_multiplier"]
     ].values
 
     im = ax.imshow(
@@ -104,7 +109,7 @@ def png_output(self):
     ax.set_yticks(range(len(performance)))
 
     ax.set_yticklabels(
-        performance["site_id"],
+        performance["Site_id"],
         fontsize=8
     )
 
@@ -134,7 +139,7 @@ def png_output(self):
 
     plt.close()
 
-    print(f"Saved PNG heatmap to: {png_path}")
+    print(f"Saved Site PNG heatmap to: {png_path1}")
 
     self.fig = fig
 
