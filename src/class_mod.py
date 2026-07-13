@@ -8,6 +8,7 @@ class EnrollmentData:
         self.site_performance = None
         self.study_performance = None
         self.workbook = None
-        self.fig = None
+        self.fig_site = None
+        self.sig_study = None
 
         

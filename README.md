@@ -34,4 +34,11 @@ The purpose of this project is to make a model that will estimate the expected e
 
 Clone the repo:
 
-## License
+## Resolving Common Errors
+
+- If you experience issues with fitting the model to the data such as high rhat values or low ess values, a good starting point is to check the summary statistics:
+    ```
+    summary = az.summary(self.trace)
+    print(summary.sort_values("r_hat", ascending=False))
+    print(summary.sort_values("ess_bulk"))
+    ```

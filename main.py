@@ -5,6 +5,7 @@ from src.bayes_model import run_model
 from src.output import compute_performance, excel_output, png_output
 
 def main():
+    
     data = EnrollmentData()
     
     # Load
@@ -27,15 +28,12 @@ def main():
         print("Model error:", repr(e))
         raise
 
-
     # Output
-    '''
+
     compute_performance(data)
-    print(data.site_performance)
-    print(data.study_performance)
     excel_output(data)
     png_output(data)
-    '''
+
 
 if __name__ == "__main__":
     main()

@@ -7,7 +7,7 @@ from openpyxl.formatting.rule import ColorScaleRule
 
 def compute_performance(self):
     
-    print("Entering compute-performance...")
+    print("Entering compute performance...")
     trace = self.trace
     df_model = self.df_model
 
@@ -16,8 +16,8 @@ def compute_performance(self):
     ).values
 
     site_performance = pd.DataFrame({
-        "Site_id": df_model.drop_duplicates("site_idx")["Site_id"],
-        "State": df_model.drop_duplicates("site_idx")["State"],
+        "Site_id": df_model.drop_duplicates("Site_idx")["Site_id"],
+        "State": df_model.drop_duplicates("Site_idx")["State"],
         "U_site": u_site_mean,
         "Performance_multiplier": np.exp(u_site_mean)
     })
@@ -27,8 +27,8 @@ def compute_performance(self):
     u_study_mean = trace.posterior["u_study"].mean(dim=("chain", "draw")).values
 
     study_performance = pd.DataFrame({
-        "Study_id": df_model.drop_duplicates("study_idx")["Study_id"],
-        "State": df_model.drop_duplicates("study_idx")["State"],
+        "Study_id": df_model.drop_duplicates("Study_idx")["Study_id"],
+        "State": df_model.drop_duplicates("Study_idx")["State"],
         "U_study": u_study_mean,
         "Performance_multiplier": np.exp(u_study_mean)
 
@@ -83,21 +83,26 @@ def excel_output(self):
 
 def png_output(self):
     
-    performance = self.performance
+    site_performance = self.site_performance
+    study_performance = self.study_performance
 
     os.makedirs("results", exist_ok=True)
     png_path1 = "results/site_performance_heatmap.png"
-    
-    fig_height = max(
+    '''
+    -------------------------
+    PNG for Site Performance
+    -------------------------
+    '''
+    fig_height_site = max(
         6,
-        len(performance) * 0.3
+        len(site_performance) * 0.3
     )
 
-    fig, ax = plt.subplots(
-        figsize=(6, fig_height)
+    fig_site, ax = plt.subplots(
+        figsize=(6, fig_height_site)
     )
 
-    heatmap_values = performance[
+    heatmap_values = site_performance[
         ["Performance_multiplier"]
     ].values
 
@@ -107,10 +112,10 @@ def png_output(self):
         aspect="auto"
     )
 
-    ax.set_yticks(range(len(performance)))
+    ax.set_yticks(range(len(site_performance)))
 
     ax.set_yticklabels(
-        performance["Site_id"],
+        site_performance["Site_id"],
         fontsize=8
     )
 
@@ -133,7 +138,7 @@ def png_output(self):
     plt.tight_layout()
 
     plt.savefig(
-        png_path,
+        png_path1,
         dpi=300,
         bbox_inches="tight"
     )
@@ -141,7 +146,69 @@ def png_output(self):
     plt.close()
 
     print(f"Saved Site PNG heatmap to: {png_path1}")
+    '''
+    -------------------------
+    PNG for Site Performance
+    -------------------------
+    '''
+    png_path2 = "results/study_performance_heatmap.png"
 
-    self.fig = fig
+    fig_height_study = max(
+        6,
+        len(study_performance) * 0.3
+    )
 
-    return self.fig
+    fig_study, ax = plt.subplots(
+        figsize=(6, fig_height_study)
+    )
+
+    heatmap_values = study_performance[
+        ["Performance_multiplier"]
+    ].values
+
+    im = ax.imshow(
+        heatmap_values,
+        cmap="RdYlGn",
+        aspect="auto"
+    )
+
+    ax.set_yticks(range(len(study_performance)))
+
+    ax.set_yticklabels(
+        study_performance["Study_id"],
+        fontsize=8
+    )
+
+    ax.set_xticks([0])
+
+    ax.set_xticklabels(
+        ["Performance Multiplier"]
+    )
+
+    ax.set_title(
+        "Study Performance Heatmap",
+        fontsize=14
+    )
+
+    cbar = plt.colorbar(im)
+    cbar.set_label(
+        "Performance Multiplier"
+    )
+
+    plt.tight_layout()
+
+    plt.savefig(
+        png_path2,
+        dpi=300,
+        bbox_inches="tight"
+    )
+
+    plt.close()
+
+    print(f"Saved Study PNG heatmap to: {png_path2}")
+
+
+    self.fig_site = fig_site
+    self.fig_study = fig_study
+
+    return self.fig_site, self.fig_study

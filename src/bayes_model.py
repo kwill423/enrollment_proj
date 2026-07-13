@@ -1,6 +1,7 @@
 import pymc as pm
 import numpy as np
 import pandas as pd
+import arviz as az
 
 
 def run_model(self):
@@ -155,20 +156,30 @@ def run_model(self):
         sigma_site = pm.HalfNormal("sigma_site", sigma=1, initval=0.5)
         sigma_study = pm.HalfNormal("sigma_study", sigma=1, initval=0.5)
 
-        u_site = pm.Normal(
-            "u_site",
+        u_site_raw =pm.Normal(
+            "u_site_raw",
             mu=0,
-            sigma=sigma_site,
+            sigma=1,
             shape=n_sites,
             initval=np.zeros(n_sites),
         )
 
-        u_study = pm.Normal(
-            "u_study",
+        u_site =pm.Deterministic(
+            "u_site",
+            sigma_site * u_site_raw,
+        )
+
+        u_study_raw = pm.Normal(
+            "u_study_raw",
             mu=0,
-            sigma=sigma_study,
+            sigma=1,
             shape=n_studies,
             initval=np.zeros(n_studies),
+        )
+
+        u_study = pm.Deterministic(
+            "u_study",
+            sigma_study * u_study_raw,
         )
 
         log_lambda = (
@@ -191,12 +202,12 @@ def run_model(self):
 
         try:
             self.trace = pm.sample(
-                draws=100,
-                tune=100,
-                chains=1,
+                draws=4000,
+                tune=4000,
+                chains=4,
                 cores=1,
                 init="adapt_diag",
-                target_accept=0.9,
+                target_accept=0.99,
                 progressbar=True,
                 random_seed=42,
             )
@@ -208,7 +219,7 @@ def run_model(self):
             print("Running PyMC model debug...")
             model.debug()
             raise
-
+        
         print("Model complete")
 
     return self.df_model, self.trace
