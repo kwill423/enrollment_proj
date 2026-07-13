@@ -18,7 +18,7 @@ def main():
     merge_prevalence(data)
 
     # Model
-    
+    print("Before sample")
     try:
         print("Starting model")
         run_model(data)
