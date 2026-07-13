@@ -7,8 +7,9 @@ The purpose of this project is to make a model that will estimate the expected e
 
 ## Features
 - requirements.txt
-    - Lists required libraries that can be installed with
+    - Lists required libraries that can be installed with: 
     ```
+    .venv/Scripts/activate
     pip install -r requirements.txt
     ```
 - input.py
