@@ -18,13 +18,24 @@ def main():
     merge_prevalence(data)
 
     # Model
-    run_model(data)
+    
+    try:
+        print("Starting model")
+        run_model(data)
+        print("Model finished")
+    except Exception as e:
+        print("Model error:", repr(e))
+        raise
+
 
     # Output
+    '''
     compute_performance(data)
-    print(data.performance)
+    print(data.site_performance)
+    print(data.study_performance)
     excel_output(data)
     png_output(data)
+    '''
 
 if __name__ == "__main__":
     main()

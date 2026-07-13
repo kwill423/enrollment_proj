@@ -6,7 +6,8 @@ from openpyxl import load_workbook
 from openpyxl.formatting.rule import ColorScaleRule
 
 def compute_performance(self):
-
+    
+    print("Entering compute-performance...")
     trace = self.trace
     df_model = self.df_model
 

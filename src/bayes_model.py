@@ -48,6 +48,7 @@ def run_model(self):
 
         pm.Poisson("y_obs", mu= mu, observed=y)
 
-        self.trace = pm.sample(1000, tune=1000)
+        self.trace = pm.sample(100, tune=10)
+        print("Model complete")
 
     return self.df_model, self.trace

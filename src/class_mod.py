@@ -5,7 +5,8 @@ class EnrollmentData:
         self.df_prev = None
         self.df_model = None
         self.trace = None
-        self.performance = None
+        self.site_performance = None
+        self.study_performance = None
         self.workbook = None
         self.fig = None
 
