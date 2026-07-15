@@ -76,33 +76,7 @@ def run_model(self):
     n_studies = int(df_model["Study_idx"].nunique())
 
     # --------------------------------------------------
-    # 5. Debug prints
-    # --------------------------------------------------
-    print("Data checks before sampling:")
-    print("Rows used:", len(df_model))
-    print("Enrollments min/max:", y.min(), y.max())
-    print("Time min/max:", t.min(), t.max())
-    print("Population min/max:", pop.min(), pop.max())
-    print("Incidence min/max:", incidence.min(), incidence.max())
-    print("n_sites:", n_sites, "| max site_idx:", site_idx.max())
-    print("n_studies:", n_studies, "| max study_idx:", study_idx.max())
-
-    print("Missing values after filtering:")
-    print(
-        df_model[
-            [
-                "Enrollments",
-                "Time",
-                "Population",
-                "Incidence_rate",
-                "Site_idx",
-                "Study_idx",
-            ]
-        ].isna().sum()
-    )
-
-    # --------------------------------------------------
-    # 6. Safety checks
+    # Safety checks
     # --------------------------------------------------
     if np.any(~np.isfinite(y)):
         raise ValueError("Enrollments contains NaN or infinite values.")

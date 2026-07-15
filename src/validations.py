@@ -21,3 +21,13 @@ def validate_excel(file_path, df, req_cols):
 def validate_csv(csv_path):
     if csv_path:
         print("Saved results as CSV to: {csv_path}")
+'''
+print("Data checks before sampling:")
+print("Rows used:", len(df_model))
+print("Enrollments min/max:", y.min(), y.max())
+print("Time min/max:", t.min(), t.max())
+print("Population min/max:", pop.min(), pop.max())
+print("Incidence min/max:", incidence.min(), incidence.max())
+print("n_sites:", n_sites, "| max site_idx:", site_idx.max())
+print("n_studies:", n_studies, "| max study_idx:", study_idx.max())
+'''

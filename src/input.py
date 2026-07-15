@@ -5,11 +5,20 @@ def load_enroll_data(self, file_path):
     df = df.rename(columns={
         "Study": "Study_id",
         "Study Site": "Site_id",
+        "Fiscal Year": "FY",
         "Pts per Site": "Enrollments",
         "SER": "Prior_rate",
         "Duration (months)": "Time",
-        "State": "State"
+        "State": "State",
+        "Postal / Zip Code": "Zip"
     })
+
+    
+    df.drop(
+        columns=df.columns[df.columns.str.contains('Unnamed')],
+        inplace=True
+    )
+
 
     self.df = df
 

@@ -1,7 +1,9 @@
-pandas
+kaleido
+matplotlib
 numpy
+openpyxl
+pandas
+pgeocode
+plotly
 pymc
 requests
-matplotlib
-plotly
-openpyxl
