@@ -19,8 +19,7 @@ def clean_zip(self):
         .astype(str)
         .str.zfill(5)
     )
-
-    print(df.head())
+    
     self.df = df
 
     return self.df

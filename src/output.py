@@ -152,15 +152,9 @@ def png_output(self):
         color_continuous_scale= "RdYlGn"
     )
 
-    fig.write_image(
-        png_path,
-        width= 1600,
-        height= 900
-    )
-    print(f"Saved PNG to: {png_path}")
-    
     html_path = "results/interactive_heatmap.html"
     fig.write_html(html_path)
+    print(f"Saved interactive heatmap to: {html_path}")
 
     self.site_performance = site_performance
     self.fig = fig
