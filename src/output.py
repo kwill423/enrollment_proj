@@ -158,6 +158,9 @@ def png_output(self):
         height= 900
     )
     print(f"Saved PNG to: {png_path}")
+    
+    html_path = "results/interactive_heatmap.html"
+    fig.write_html(html_path)
 
     self.site_performance = site_performance
     self.fig = fig
