@@ -118,8 +118,8 @@ def excel_output(self):
         end_type="max",
         end_color="63BE7B"
         )
-    site_ws.conditional_formatting.add(f"D2:D{site_row_count}", color_rule)
-    study_ws.conditional_formatting.add(f"D2:D{study_row_count}", color_rule)
+    site_ws.conditional_formatting.add(f"H2:H{site_row_count}", color_rule)
+    study_ws.conditional_formatting.add(f"H2:H{study_row_count}", color_rule)
 
     workbook.save(excel_path)
     print(f"Saved workbook to: {excel_path}")

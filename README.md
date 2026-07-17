@@ -37,21 +37,21 @@ The purpose of this project is to make a model that will estimate the expected e
 ## Installation
 
 To clone the repository:
-```
-git clone https://github.com/kwill423/enrollment_proj.git
-```
+    ```
+    git clone https://github.com/kwill423/enrollment_proj.git
+    ```
 Navigate to the directory:
-```
-cd enrollment_proj
-```
+    ```
+    cd enrollment_proj
+    ```
 Create your environment:
-```
-.venv/Scripts/activate
-```
+    ```
+    .venv/Scripts/activate
+    ```
 Install requirements: 
-```
-pip install -r requirements.txt
-```
+    ```
+    pip install -r requirements.txt
+    ```
 
 ## Resolving Common Errors
 
