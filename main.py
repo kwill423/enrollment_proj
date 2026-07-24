@@ -10,9 +10,9 @@ def main():
     data = EnrollmentData()
     
     # Load
-    load_enroll_data(data, "data/dummy_data2.xlsx")
-    load_prev_data(data, "data/pancreatic_cancer_prev.xlsx")
- 
+    load_enroll_data(data, "data/merged_enroll_rate.xlsx")
+    load_prev_data(data, "data/stomach_cancer_prev.csv")
+
     # Clean
     clean_zip(data)
     zip_conversion(data)
@@ -35,7 +35,6 @@ def main():
     compute_performance(data)
     excel_output(data)
     png_output(data)
-
 
 if __name__ == "__main__":
     main()

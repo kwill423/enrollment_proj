@@ -45,7 +45,7 @@ def run_model(self):
     # Population and incidence must not be negative
     df_model = df_model[df_model["Population"] >= 0].copy()
     df_model = df_model[df_model["Incidence_rate"] >= 0].copy()
-
+    
     print(f"Training model on {len(df_model)} rows out of {len(df)} total rows...")
 
     if len(df_model) == 0:
@@ -182,8 +182,7 @@ def run_model(self):
                 cores=1,
                 init="adapt_diag",
                 target_accept=0.99,
-                progressbar=True,
-                random_seed=42,
+                progressbar=True
             )
 
         except Exception as e:

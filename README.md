@@ -34,6 +34,34 @@ The purpose of this project is to make a model that will estimate the expected e
     - Heatmap is for the performance multiplier values, not the random variables u_site or u_study that are learned from the model. Performance multiplier is determined from this variable by taking: e(u_site) or e(u_study)
     - Writes interactive heatmap, noting site location across US map, out to new output file: interactive_heatmap.html
 
+## Set Up
+Prior to running the program, the excel file containing enrollment data needs to be merged and cleaned if taken from Veeva like the original files. Veeva provided the subject ID, study, study site, screened date, fiscal year, and country columns. Formulas were used to create a cleaned country column and key containing a unique ID for the study|site|FY. The second sheet of the first file is what pulls the calculated site enrollment rate, SER. A separate Veeva report contains the state for each study site. This is not required if the file used for the program already has state and zip code information. The two files are merged using a simple python script below or directly through excel:
+```
+import pandas as pd
+
+df1 = pd.read_excel("ENROLLMENT_FILE", sheet_name= "SiteLevel")
+df2 = pd.read_excel("site_states.xlsx")
+
+df1['Study Site'] = df1['Study Site'].astype(str).str.strip()
+df2['Study Site'] = df2['Study Site'].astype(str).str.strip()
+
+merged = df1.merge(
+    df2[['Study', 'Study Site', 'State', 'Country', 'Postal / Zip Code']],
+    on=['Study', 'Study Site', 'Country'],
+    how='left'
+)
+
+merged = merged[merged["Country"] == "USA"]
+merged.to_excel("merged_enroll_rate.xlsx", index=False)
+```
+This is what creates the file needed to input into the program. If done correctly, it should contain: Study, Study Site, Fiscal Year, First Enrolled Date, Last Enrolled Date, Pts per Site, Duration (months), SER, Country, Key, State. 
+If issues arise while running, ensure the columns are an exact match to what is written above.
+The NIH excel file also had a cleaned State column prior to input and a column "FIPS" that is deleted for a better set up. The line below is the excel formula to add into the added "State (cleaned)" column:
+```
+=TRIM(LEFT(A2, FIND("(", A2 & "(") - 1))))
+```
+Cleaning the NIH file is what allows you to use columns B and C easily.
+
 ## Installation
 
 To clone the repository:

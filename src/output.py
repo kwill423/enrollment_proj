@@ -66,7 +66,7 @@ def compute_performance(self):
     
     study_lookup = (
         df_model[
-            ["Study_idx", "Study_id", "State"]
+            ["Study_idx", "Study_id"]
         ]
         .drop_duplicates("Study_idx")
         .sort_values("Study_idx")
@@ -79,8 +79,8 @@ def compute_performance(self):
     study_performance["Performance_multiplier"] = np.exp(u_study_mean)
 
     os.makedirs("results", exist_ok=True)
-    csv_path1 = "results/site_performance2.csv"
-    csv_path2 = "results/study_performance2.csv"
+    csv_path1 = "results/site_performance_stomach.csv"
+    csv_path2 = "results/study_performance_stomach.csv"
     site_performance.to_csv(csv_path1, index=False)
     study_performance.to_csv(csv_path2, index=False)
     
@@ -95,7 +95,7 @@ def compute_performance(self):
 def excel_output(self):
     site_performance = self.site_performance
     study_performance = self.study_performance
-    excel_path = "results/performance2.xlsx"
+    excel_path = "results/performance_stomach.xlsx"
 
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
         site_performance.to_excel(writer, sheet_name="Site_Performance", index=False)
@@ -119,7 +119,7 @@ def excel_output(self):
         end_color="63BE7B"
         )
     site_ws.conditional_formatting.add(f"H2:H{site_row_count}", color_rule)
-    study_ws.conditional_formatting.add(f"H2:H{study_row_count}", color_rule)
+    study_ws.conditional_formatting.add(f"D2:D{study_row_count}", color_rule)
 
     workbook.save(excel_path)
     print(f"Saved workbook to: {excel_path}")
@@ -133,7 +133,6 @@ def png_output(self):
     site_performance = self.site_performance
 
     os.makedirs("results", exist_ok=True)
-    png_path = "results/site_performance_heatmap.png"
 
     fig = px.scatter_geo(
         site_performance,
@@ -152,7 +151,7 @@ def png_output(self):
         color_continuous_scale= "RdYlGn"
     )
 
-    html_path = "results/interactive_heatmap.html"
+    html_path = "results/interactive_heatmap_stomach.html"
     fig.write_html(html_path)
     print(f"Saved interactive heatmap to: {html_path}")
 
