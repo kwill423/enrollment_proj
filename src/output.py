@@ -7,7 +7,7 @@ from openpyxl.formatting.rule import ColorScaleRule
 import os
 import plotly.express as px
 
-def compute_performance(self):
+def compute_performance(self, csv_path1= "results/site_performance.csv", csv_path2= "results/study_performance.csv" ):
     
     print("Entering compute performance...")
     trace = self.trace
@@ -79,8 +79,6 @@ def compute_performance(self):
     study_performance["Performance_multiplier"] = np.exp(u_study_mean)
 
     os.makedirs("results", exist_ok=True)
-    csv_path1 = "results/site_performance_stomach.csv"
-    csv_path2 = "results/study_performance_stomach.csv"
     site_performance.to_csv(csv_path1, index=False)
     study_performance.to_csv(csv_path2, index=False)
     
@@ -92,10 +90,10 @@ def compute_performance(self):
 
     return self.site_performance, self.study_performance
 
-def excel_output(self):
+def excel_output(self, excel_path= "results/performance.xlsx"):
+
     site_performance = self.site_performance
     study_performance = self.study_performance
-    excel_path = "results/performance_stomach.xlsx"
 
     with pd.ExcelWriter(excel_path, engine="openpyxl") as writer:
         site_performance.to_excel(writer, sheet_name="Site_Performance", index=False)
@@ -128,7 +126,7 @@ def excel_output(self):
 
     return self.workbook
 
-def png_output(self):
+def png_output(self, html_path= "results/interactive_heatmap.html"):
     
     site_performance = self.site_performance
 
@@ -150,8 +148,51 @@ def png_output(self):
         scope= "usa",
         color_continuous_scale= "RdYlGn"
     )
+    
+    fig.update_layout(
+        title={
+            "text": "Site Enrollment Performance Across the US",
+            "x": 0.5,
+            "xanchor": "center"
+        }
+    )
 
-    html_path = "results/interactive_heatmap_stomach.html"
+    fig.update_layout(
+        coloraxis_colorbar= dict(
+            title= "Performance",
+            tickvals= [0.75, 1.0, 1.25],
+            ticktext= [
+                "Underperforming (< 0.75)",
+                "As Expected (1.0)",
+                "Overperforming (> 1.25)"
+            ]
+        )
+    )
+
+    missing_cords = site_performance[
+        site_performance["Latitude"].isna() |
+        site_performance["Longitude"].isna()
+    ]
+
+    if len(missing_cords) > 0:
+        omitted_sites = ",".join(
+            missing_cords["Site_id"].astype(str).tolist()
+        )
+        caption = (f"Sites not shown on  map due to missing zip codes:({omitted_sites})")
+    else:
+        caption = "All sites contained zip codes and are included in the map."
+
+    fig.add_annotation(
+        text = caption,
+        xref= "paper",
+        yref= "paper",
+        x= 0,
+        y= -0.12,
+        showarrow= False,
+        align= "left",
+        font= dict(size= 12)
+    )    
+
     fig.write_html(html_path)
     print(f"Saved interactive heatmap to: {html_path}")
 

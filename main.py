@@ -11,7 +11,7 @@ def main():
     
     # Load
     load_enroll_data(data, "data/merged_enroll_rate.xlsx")
-    load_prev_data(data, "data/stomach_cancer_prev.csv")
+    load_prev_data(data, "data/pancreatic_cancer_prev.xlsx")
 
     # Clean
     clean_zip(data)
