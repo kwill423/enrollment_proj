@@ -128,12 +128,12 @@ def excel_output(self, excel_path= "results/performance.xlsx"):
 
 def png_output(self, html_path= "results/interactive_heatmap.html"):
     
-    site_performance = self.site_performance
+    plot_df = self.site_performance.copy(deep= True)
 
     os.makedirs("results", exist_ok=True)
 
     fig = px.scatter_geo(
-        site_performance,
+        plot_df,
         lat= "Latitude",
         lon= "Longitude",
         color= "Performance_multiplier",
@@ -169,9 +169,9 @@ def png_output(self, html_path= "results/interactive_heatmap.html"):
         )
     )
 
-    missing_cords = site_performance[
-        site_performance["Latitude"].isna() |
-        site_performance["Longitude"].isna()
+    missing_cords = plot_df[
+        plot_df["Latitude"].isna() |
+        plot_df["Longitude"].isna()
     ]
 
     if len(missing_cords) > 0:
@@ -196,7 +196,7 @@ def png_output(self, html_path= "results/interactive_heatmap.html"):
     fig.write_html(html_path)
     print(f"Saved interactive heatmap to: {html_path}")
 
-    self.site_performance = site_performance
+    self.plot_df = plot_df
     self.fig = fig
 
-    return self.site_performance, self.fig
+    return self.plot_df, self.fig
