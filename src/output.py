@@ -108,13 +108,15 @@ def excel_output(self, excel_path= "results/performance.xlsx"):
     study_row_count = len(study_performance) + 1
 
     color_rule = ColorScaleRule(
-        start_type="min",
+        start_type="num",
+        start_value=0.75,
         start_color="F8696B",
-        mid_type="percentile",
-        mid_value=50,
+        mid_type="num",
+        mid_value=1.0,
         mid_color="FFEB84",
-        end_type="max",
-        end_color="63BE7B"
+        end_type="num",
+        end_color="63BE7B",
+        end_value=2.0
         )
     site_ws.conditional_formatting.add(f"H2:H{site_row_count}", color_rule)
     study_ws.conditional_formatting.add(f"D2:D{study_row_count}", color_rule)
@@ -146,8 +148,11 @@ def html_output(self, html_path= "results/interactive_heatmap.html"):
             "Longitude": False
         },
         scope= "usa",
-        color_continuous_scale= "RdYlGn"
+        color_continuous_scale= "RdYlGn",
+        range_color= (0,2)
     )
+
+    fig.update_coloraxes(cmid= 1.0)
     
     fig.update_layout(
         title={
@@ -187,9 +192,11 @@ def html_output(self, html_path= "results/interactive_heatmap.html"):
         xref= "paper",
         yref= "paper",
         x= 0,
-        y= -0.12,
+        y= 0,
         showarrow= False,
         align= "left",
+        xanchor= "left",
+        yanchor= "bottom",
         font= dict(size= 12)
     )    
 
