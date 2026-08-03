@@ -192,7 +192,5 @@ def run_model(self):
             print("Running PyMC model debug...")
             model.debug()
             raise
-        
-        print("Model complete")
 
     return self.df_model, self.trace

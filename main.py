@@ -11,7 +11,7 @@ def main():
     
     # Load
     load_enroll_data(data, "data/merged_enroll_rate.xlsx")
-    load_prev_data(data, "data/stomach_cancer_prev.xlsx")
+    load_prev_data(data, "data/stomach_cancer_prev.csv")
 
     # Clean
     clean_zip(data)
@@ -25,7 +25,7 @@ def main():
     try:
         print("Starting model")
         run_model(data)
-        print("Model finished")
+        print("Model complete")
     except Exception as e:
         print("Model error:", repr(e))
         raise
