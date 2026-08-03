@@ -2,7 +2,7 @@ from src.class_mod import EnrollmentData
 from src.input import load_enroll_data, load_prev_data
 from src.populations import get_state_populations, merge_population, merge_prevalence, state_mapping
 from src.bayes_model import run_model
-from src.output import compute_performance, excel_output, png_output
+from src.output import compute_performance, excel_output, html_output
 from src.zip_codes import clean_zip, zip_conversion
 
 def main():
@@ -11,7 +11,7 @@ def main():
     
     # Load
     load_enroll_data(data, "data/merged_enroll_rate.xlsx")
-    load_prev_data(data, "data/pancreatic_cancer_prev.xlsx")
+    load_prev_data(data, "data/stomach_cancer_prev.xlsx")
 
     # Clean
     clean_zip(data)
@@ -32,9 +32,19 @@ def main():
 
     # Output
 
-    compute_performance(data)
-    excel_output(data)
-    png_output(data)
+    compute_performance(
+        data, 
+        csv_path1= "results/site_performance_stomach.csv", 
+        csv_path2= "results/study_performance_stomach.csv"
+        )
+    excel_output(
+        data, 
+        excel_path= "results/performance_stomach.xlsx"
+        )
+    html_output(
+        data,
+        html_path= "results/interactive_heatmap_stomach.html"
+        )
 
 if __name__ == "__main__":
     main()

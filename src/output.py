@@ -126,7 +126,7 @@ def excel_output(self, excel_path= "results/performance.xlsx"):
 
     return self.workbook
 
-def png_output(self, html_path= "results/interactive_heatmap.html"):
+def html_output(self, html_path= "results/interactive_heatmap.html"):
     
     plot_df = self.site_performance.copy(deep= True)
 
